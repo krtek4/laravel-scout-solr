@@ -234,6 +234,7 @@ class SolrEngine extends Engine
         // get the filter query
         // TODO: this is highly inefficient due to the unique key? Or will the query still be cached?
         $filterQuery = $this->filters($builder);
+        dump($filterQuery);
         $query->createFilterQuery(md5($filterQuery['query']))->setQuery($filterQuery['query'], $filterQuery['items']);
 
         // build any faceting
@@ -307,10 +308,11 @@ class SolrEngine extends Engine
             $items = $nested['items'];
         } else {
             $field = $data['field'];
+            $mode = $data['mode'];
             $items = is_array($data['query']) ? $data['query'] : [$data['query']];
             $start = count($carryItems);
-            $query = implode(' OR ', array_map(function($index) use($field) {
-                return "$field:%$index%";
+            $query = implode(' OR ', array_map(function($index) use($field, $mode) {
+                return "$field:%$mode$index%";
             }, range($start + 1, $start + count($items))));
         }
 
