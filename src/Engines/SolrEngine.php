@@ -3,8 +3,8 @@
 namespace Scout\Solr\Engines;
 
 use Laravel\Scout\Builder;
-use Laravel\Scout\Engines\Engine;
 use Scout\Solr\Searchable;
+use Laravel\Scout\Engines\Engine;
 use Solarium\Client as SolariumClient;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -91,7 +91,7 @@ class SolrEngine extends Engine
         $model = $models->first();
         $delete = $this->client->createUpdate();
         $endpoint = $model->searchableAs();
-        $ids = $models->map(function (Searchable $model) {
+        $ids = $models->map(function ($model) {
             return $model->getScoutKey();
         });
         $delete->addDeleteByIds($ids->all());
